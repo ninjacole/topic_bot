@@ -45,14 +45,17 @@ class CommandHandler implements ICommandHandler {
                     result.message = this.UNKNOWN;
                 }
             } else {
-                result.success = false;
-                result.message = this.MISSING;
+                result.success = true;
             }
         } else {
             result.success = false;
         }
 
         return result;
+    }
+
+    public showHelp = (message: Message) => {
+        message.reply("Commands: \n!ytplay play <youtube url>\t play audio from provided youtube url\n!ytplay summon\t join your voice channel\n!ytplay stop\t stop playing the current song");
     }
 }
 

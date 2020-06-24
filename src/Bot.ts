@@ -71,20 +71,24 @@ class Bot {
 
     private onCommandHandlerResultReceieved = (message: Message, result: CommandHandlerResult) => {
         if (result.success) {
-            switch (result.command) {
-                case Commands.PLAY:
-                    const url: string = result.additionalArgs;
-                    this.player.play(url, message);
-                    break;
-                case Commands.STOP:
-                    this.player.stop(message);
-                    break;
-                case Commands.SUMMON:
-                    this.player.joinChannel(message);
-                    break;
+            if (result.command) {
+                switch (result.command) {
+                    case Commands.PLAY:
+                        const url: string = result.additionalArgs;
+                        this.player.play(url, message);
+                        break;
+                    case Commands.STOP:
+                        this.player.stop(message);
+                        break;
+                    case Commands.SUMMON:
+                        this.player.joinChannel(message);
+                        break;
 
-                default:
-                    console.log("Command handler gave us an unknown value: ", result.command);
+                    default:
+                        console.log("Command handler gave us an unknown value: ", result.command);
+                }
+            } else {
+                this.commandHandler.showHelp(message);
             }
         } else {
             result.message && message.reply(result.message);

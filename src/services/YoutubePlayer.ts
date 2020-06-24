@@ -26,13 +26,20 @@ class YoutubePlayer {
     public play = (url: string, message: Message) => {
         if (this.validate(url)) {
             if (!this.voiceConnection) {
-                this.joinChannel(message);
+                this.joinChannel(message).then(() => {
+                    this.playSong(url);
+                })
+            } else {
+                this.playSong(url);
             }
 
-            this.stream = this.voiceConnection.play(ytdl(url, { filter: 'audioonly' }));
         } else {
             message.reply(this.INVALID_URL);
         }
+    }
+
+    private playSong = (url: string) => {
+        this.stream = this.voiceConnection.play(ytdl(url, { filter: 'audioonly' }));
     }
 
     public stop = (message: Message) => {
@@ -44,15 +51,16 @@ class YoutubePlayer {
         return (url.match(this.YOUTUBE_URL_REGEX)) ? RegExp.$1 : false;
     }
 
-    public joinChannel = (message: Message) => {
+    public joinChannel = async (message: Message): Promise<void> => {
         if (message.member.voice.channel) {
-            message.member.voice.channel.join().then((connection: VoiceConnection) => {
+            return message.member.voice.channel.join().then((connection: VoiceConnection) => {
                 this.voiceConnection = connection;
             }).catch((reason: string) => {
                 message.reply(this.FAILED_TO_JOIN_CHANNEL + " : " + reason);
             })
         } else {
             message.reply(this.NOT_IN_CHANNEL);
+            return Promise.reject();
         }
     }
 }
