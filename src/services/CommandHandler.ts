@@ -24,7 +24,7 @@ class CommandHandler implements ICommandHandler {
             // regex removes all the whitespace around words
             const args: string[] = message.content.slice(Commands.PREFIX.length).match(/\S+/g);
 
-            if (args.length > 0) {
+            if (args && args.length > 0) {
                 if (args[0] === Commands.SUMMON) {
                     result.success = true;
                     result.command = Commands.SUMMON;
