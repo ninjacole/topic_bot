@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js"
-import { Result } from "./result";
+import { Result } from "./Result";
 import { IMessageHandler } from "./interfaces/IMessageHandler";
 
 class Bot {

@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { PingParser } from "./PingParser";
 import { IMessageHandler } from "../interfaces/IMessageHandler";
 
+// Handles messages, looks for pings.
 class PingMessageHandler implements IMessageHandler {
     private pingParser: PingParser;
 

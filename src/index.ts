@@ -2,7 +2,7 @@ import { Bot } from "./Bot";
 import { PingMessageHandler } from "./services/PingMessageHandler";
 import { PingParser } from "./services/PingParser";
 import { config } from './config';
-import { Result } from "./result";
+import { Result } from "./Result";
 
 const messageHandler = new PingMessageHandler(new PingParser());
 const bot = new Bot(config.token, messageHandler);

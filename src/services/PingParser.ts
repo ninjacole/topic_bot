@@ -1,3 +1,4 @@
+// Parses for the word ping
 class PingParser {
     private ping: string = 'ping';
 
