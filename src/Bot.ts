@@ -16,18 +16,17 @@ class Bot {
     }
 
     // Connect discord client
-    public connect = (): Result => {
+    public connect = (): Promise<Result> => {
         let result: Result = new Result();
 
-        this.client.login(this.token).then(() => {
+        return this.client.login(this.token).then(() => {
             result.message = "Logged in successfully";
             result.success = true;
+            this.connected = true;
         }).catch((error) => {
             result.message = error;
             result.success = false;
-        });
-
-        return result;
+        }).then(() => result);
     }
 
     // Start listening to discord messages
