@@ -1,31 +1,38 @@
-import { VoiceConnection, Message } from "discord.js";
+import { VoiceConnection, Message, StreamDispatcher } from "discord.js";
 
 const ytdl = require('ytdl-core');
 
 class YoutubePlayer {
-    constructor() {
+    private readonly INVALID_URL: string;
+    private readonly STOPPED: string;
+    private readonly YOUTUBE_URL_REGEX: RegExp;
 
+    private stream: StreamDispatcher;
+
+    constructor() {
+        this.INVALID_URL = "Invalid youtube URL";
+        this.STOPPED = "Stopped";
+
+        // @author: Stephan Schmitz <eyecatchup@gmail.com>
+        // @url: https://stackoverflow.com/a/10315969/624466
+        this.YOUTUBE_URL_REGEX = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     }
 
     public play = (url: string, message: Message, voiceConnection: VoiceConnection) => {
         if (this.validate(url)) {
-            voiceConnection.play(ytdl(url, { filter: 'audioonly' }));
+            this.stream = voiceConnection.play(ytdl(url, { filter: 'audioonly' }));
         } else {
-            message.reply("Invalid youtube URL");
+            message.reply(this.INVALID_URL);
         }
     }
 
-    public stop = (voiceConnection: VoiceConnection) => {
-        voiceConnection.disconnect();
+    public stop = (message: Message, voiceConnection: VoiceConnection) => {
+        this.stream && this.stream.destroy();
+        message.reply(this.STOPPED);
     }
 
-    // JavaScript function to match (and return) the video Id 
-    // of any valid Youtube Url, given as input string.
-    // @author: Stephan Schmitz <eyecatchup@gmail.com>
-    // @url: https://stackoverflow.com/a/10315969/624466
     private validate = (url: string) => {
-        const p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-        return (url.match(p)) ? RegExp.$1 : false;
+        return (url.match(this.YOUTUBE_URL_REGEX)) ? RegExp.$1 : false;
     }
 }
 

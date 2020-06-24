@@ -89,7 +89,7 @@ class Bot {
                     this.player.play(url, message, this.voiceConnection);
                     break;
                 case Commands.STOP:
-                    this.player.stop(this.voiceConnection);
+                    this.player.stop(message, this.voiceConnection);
                     break;
                 case Commands.SUMMON:
                     this.joinChannel(message);
