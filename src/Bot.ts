@@ -15,18 +15,12 @@ class Bot {
     private connected: boolean = false;
     private readonly UNKNOWN_COMMAND: string;
     private readonly MISSING_COMMAND: string;
-    private readonly FAILED_TO_JOIN_CHANNEL: string;
-    private readonly NOT_IN_CHANNEL: string;
-
-    private voiceConnection: VoiceConnection;
 
     constructor(token: string, commandHandler: ICommandHandler) {
         this.token = token;
         this.commandHandler = commandHandler;
         this.UNKNOWN_COMMAND = "Uknown command.";
         this.MISSING_COMMAND = "Missing command.";
-        this.FAILED_TO_JOIN_CHANNEL = "Failed to join channel.";
-        this.NOT_IN_CHANNEL = "You're not in a voice channel.";
     }
 
     // Connect discord client
@@ -86,30 +80,18 @@ class Bot {
                     break;
                 case Commands.PLAY:
                     const url: string = result.additionalArgs;
-                    this.player.play(url, message, this.voiceConnection);
+                    this.player.play(url, message);
                     break;
                 case Commands.STOP:
-                    this.player.stop(message, this.voiceConnection);
+                    this.player.stop(message);
                     break;
                 case Commands.SUMMON:
-                    this.joinChannel(message);
+                    this.player.joinChannel(message);
                     break;
 
                 default:
                     console.log("Command handler gave us an unknown value: ", result.command);
             }
-        }
-    }
-
-    private joinChannel = (message: Message) => {
-        if (message.member.voice.channel) {
-            message.member.voice.channel.join().then((connection: VoiceConnection) => {
-                this.voiceConnection = connection;
-            }).catch((reason: string) => {
-                message.reply(this.FAILED_TO_JOIN_CHANNEL + " : " + reason);
-            })
-        } else {
-            message.reply(this.NOT_IN_CHANNEL);
         }
     }
 }
