@@ -2,9 +2,14 @@ import { Message } from "discord.js";
 import { ICommandHandler } from "../interfaces/ICommandHandler";
 import { CommandHandlerResult } from "../CommandHandlerResult";
 import { Commands } from "../helpers/Commands";
+import { Result } from "../Result";
 
 // Handles messages, looking for commands
 class CommandHandler implements ICommandHandler {
+    private readonly UNKNOWN: string = "Unknown command";
+    private readonly MISSING: string = "Missing command";
+    private readonly MISSING_SONG_URL: string = "Missing song url";
+
     constructor() {
 
     }
@@ -24,23 +29,27 @@ class CommandHandler implements ICommandHandler {
                     result.success = true;
                     result.command = Commands.SUMMON;
                 } else if (args[0] === Commands.PLAY) {
-                    result.success = true;
-                    result.command = Commands.PLAY;
-                    result.additionalArgs = args[1];
+                    if (args.length > 1) {
+                        result.success = true;
+                        result.command = Commands.PLAY;
+                        result.additionalArgs = args[1];
+                    } else {
+                        result.success = false;
+                        result.message = this.MISSING_SONG_URL;
+                    }
                 } else if (args[0] === Commands.STOP) {
                     result.success = true;
                     result.command = Commands.STOP;
                 } else {
-                    result.success = true;
-                    result.command = Commands.UNKNOWN;
+                    result.success = false;
+                    result.message = this.UNKNOWN;
                 }
             } else {
-                result.success = true;
-                result.command = Commands.MISSING;
+                result.success = false;
+                result.message = this.MISSING;
             }
         } else {
             result.success = false;
-            result.message = "Prefix missing";
         }
 
         return result;

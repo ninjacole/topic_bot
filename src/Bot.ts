@@ -72,12 +72,6 @@ class Bot {
     private onCommandHandlerResultReceieved = (message: Message, result: CommandHandlerResult) => {
         if (result.success) {
             switch (result.command) {
-                case Commands.MISSING:
-                    message.reply(this.MISSING_COMMAND);
-                    break;
-                case Commands.UNKNOWN:
-                    message.reply(this.UNKNOWN_COMMAND);
-                    break;
                 case Commands.PLAY:
                     const url: string = result.additionalArgs;
                     this.player.play(url, message);
@@ -92,6 +86,8 @@ class Bot {
                 default:
                     console.log("Command handler gave us an unknown value: ", result.command);
             }
+        } else {
+            result.message && message.reply(result.message);
         }
     }
 }
