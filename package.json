@@ -9,9 +9,12 @@
   "author": "mvarta",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.2",
     "@types/node": "^14.0.13",
     "discord.js": "^12.2.0",
-    "typescript": "^3.9.5"
+    "ffmpeg-static": "^4.2.4",
+    "typescript": "^3.9.5",
+    "ytdl-core": "^2.1.7"
   },
   "devDependencies": {
     "ts-node": "^8.10.2"

@@ -1,13 +1,14 @@
 import { Bot } from "./Bot";
-import { PingMessageHandler } from "./services/PingMessageHandler";
-import { PingParser } from "./services/PingParser";
 import { config } from './config';
 import { Result } from "./Result";
+import { CommandHandler } from "./services/CommandHandler";
+import { ICommandHandler } from "./interfaces/ICommandHandler";
 
 console.log('starting bot');
 
-const messageHandler = new PingMessageHandler(new PingParser());
-const bot = new Bot(config.token, messageHandler);
+const commandHandler: ICommandHandler = new CommandHandler();
+
+const bot = new Bot(config.token, commandHandler);
 
 bot.connect().then((connectionResult: Result) => {
     if (connectionResult.success) {

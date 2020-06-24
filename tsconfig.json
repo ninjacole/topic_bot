@@ -12,7 +12,6 @@
       "types": [
         // add node as an option
         "node",
-        "reflect-metadata"
       ],
       "typeRoots": [
         // add path to @types
